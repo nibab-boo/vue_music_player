@@ -1,16 +1,23 @@
 <template>
-  <div class="bg-white">
+  <div>
     <div
       class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8"
     >
-      <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">
+      <h2 class="text-2xl font-extrabold tracking-tight text-slate-500">
         Song List
       </h2>
 
       <div
         class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
       >
-        <div v-for="(song, index) in songs" :key="index" class="group relative">
+        <div
+          v-for="(song, index) in songs"
+          :key="index"
+          class="group relative"
+          :class="{
+            'bg-gray-500': currentSong !== null && currentSong === song,
+          }"
+        >
           <div
             @click="$emit('handlePlay', song)"
             class="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none"
@@ -23,12 +30,12 @@
           </div>
           <div class="mt-4 flex justify-between">
             <div>
-              <h3 class="text-sm text-gray-700">
+              <h3 class="text-sm text-gray-300">
                 {{ song.name }}
               </h3>
             </div>
             <p
-              class="text-sm font-medium text-gray-900"
+              class="text-sm font-medium text-gray-400"
               @click="$emit('handleDelete', song)"
             >
               <FontAwesomeIcon icon="trash" />

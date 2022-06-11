@@ -1,5 +1,5 @@
 <template>
-  <div class="current-song-box">
+  <div class="current-song-box text-zinc-200">
     <h2>{{ song.name }}</h2>
     <p>{{ song.description }}</p>
   </div>
