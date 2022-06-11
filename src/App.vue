@@ -15,7 +15,7 @@
 import NavBar from "./components/NavBar";
 import CurrentSong from "./components/CurrentSong";
 import SongList from "./components/SongList";
-import axios from "axios";
+import { mapState } from "vuex";
 
 const navigation = [
   { name: "Dashboard", href: "#", current: true },
@@ -29,56 +29,42 @@ export default {
     return {
       navigation: navigation,
       audioElement: null,
-      currentSong: null,
-      songList: null,
     };
+  },
+  computed: {
+    ...mapState(["songList", "currentSong"]),
   },
   methods: {
     handlePlay: function (payload) {
       if (this.audioElement === null) {
         this.audioElement = new Audio(payload.music_url);
-        console.log("new Player");
         this.audioElement.play();
       } else {
         if (payload === this.currentSong) {
           if (this.audioElement.paused) {
             this.audioElement.play();
-            console.log("playing");
           } else {
             console.log("pause");
             this.audioElement.pause();
           }
         } else {
-          console.log("changing");
           this.audioElement.src = payload.music_url;
           this.audioElement.play();
         }
       }
-      this.currentSong = payload;
+      // this.currentSong = payload;
+      this.$store.dispatch("changeSong", payload);
       this.audioElement.addEventListener("ended", () => {
         this.currentSong = null;
         this.audioElement = null;
       });
     },
     handleDelete: function (payload) {
-      const newList = this.songList.filter((song) => song !== payload);
-      this.songList = newList;
+      this.$store.dispatch("deleteSong", payload);
     },
   },
   created() {
-    // axios
-    // .get("./data.json")
-    axios({
-      method: "get",
-      url: "https://orangevalleycaa.org/api/music",
-      params: {
-        order: "name",
-      },
-    })
-      .then((response) => {
-        this.songList = response.data;
-      })
-      .catch((error) => console.log(error));
+    this.$store.dispatch("fetchSongs");
   },
   components: {
     // FontAwesomeIcon,
