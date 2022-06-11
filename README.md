@@ -1,4 +1,4 @@
-# client
+# Vue Music Player
 
 ## Project setup
 ```
